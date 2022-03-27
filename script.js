@@ -1,3 +1,5 @@
+// const { fetchProducts } = require('./helpers/fetchProducts');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -11,7 +13,7 @@ function createCustomElement(element, className, innerText) {
   e.innerText = innerText;
   return e;
 }
-
+// function createProductItemElement({ sku, name, image }) {
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
@@ -40,4 +42,14 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-window.onload = () => { };
+window.onload = async () => { 
+  const htmlClassItems = document.querySelector('.items'); // local pedido no requisito 1 "o que será avaliado"
+  const ArrayObjSkuNameImage = await fetchProducts('computador');
+  ArrayObjSkuNameImage.forEach((element) => {
+    htmlClassItems.appendChild(createProductItemElement(element));
+  });
+  // const addcartButton = await document.querySelectorAll('.item__add');
+  // console.log(addcartButton);
+  // addcartButton.forEach((element) => { element.addEventListener('click', )}) 
+  // htmlClassItems.appendChild(createProductItemElement(await fetchProducts('computador')));
+};
