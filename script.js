@@ -39,17 +39,31 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
+  
+  const cartItem = document.querySelector('.cart__items');
+  cartItem.appendChild(li);
+
   return li;
+}
+
+async function addItemList() {
+  const [...buttonAdicionarAoCarrinho] = document.getElementsByClassName('item__add');
+  const elementID = document.getElementsByClassName('item__sku');
+
+  buttonAdicionarAoCarrinho.forEach((elemt, index) => {
+    elemt.addEventListener('click', async () => {
+      createCartItemElement(await fetchItem(elementID[index].innerText));
+    });
+  });
 }
 
 window.onload = async () => { 
   const htmlClassItems = document.querySelector('.items'); // local pedido no requisito 1 "o que será avaliado"
   const ArrayObjSkuNameImage = await fetchProducts('computador');
-  ArrayObjSkuNameImage.forEach((element) => {
+  await ArrayObjSkuNameImage.forEach((element) => {
     htmlClassItems.appendChild(createProductItemElement(element));
   });
-  // const addcartButton = await document.querySelectorAll('.item__add');
-  // console.log(addcartButton);
-  // addcartButton.forEach((element) => { element.addEventListener('click', )}) 
-  // htmlClassItems.appendChild(createProductItemElement(await fetchProducts('computador')));
+
+  addItemList();
+
 };

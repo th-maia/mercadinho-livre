@@ -13,7 +13,7 @@ const fetchProducts = async (produto) => {
     name: elemento.title,
     image: elemento.thumbnail,
     }));
-  console.log(ArrayObjSkuNameImage);
+  // console.log(ArrayObjSkuNameImage);
   return ArrayObjSkuNameImage;
 };
 
