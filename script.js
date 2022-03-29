@@ -1,7 +1,7 @@
 // const { fetchProducts } = require('./helpers/fetchProducts');
 // const getSavedCartItems = require("./helpers/getSavedCartItems");
 // const saveCartItems = require("./helpers/saveCartItems");
-let arraySavedItems = [];
+const arraySavedItems = [];
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
