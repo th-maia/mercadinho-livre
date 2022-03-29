@@ -1,4 +1,7 @@
 // const { fetchProducts } = require('./helpers/fetchProducts');
+// const getSavedCartItems = require("./helpers/getSavedCartItems");
+// const saveCartItems = require("./helpers/saveCartItems");
+let arraySavedItems = [];
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -32,7 +35,16 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   console.log(event.target);
+  const cartPlace = document.querySelector('.cart__items');
+
+  const indexOfClickedElement = Array.prototype.indexOf.call(cartPlace.children, event.target); // entender o que faz certinho explicar https://www.geeksforgeeks.org/how-to-get-the-child-node-index-in-javascript/
+  console.log(indexOfClickedElement);
+
+  arraySavedItems.splice(indexOfClickedElement, 1);
+  console.log(arraySavedItems);
+
   event.target.remove();
+  saveCartItems(arraySavedItems);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -41,16 +53,19 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   
-  const cartItem = document.querySelector('.cart__items');
-  cartItem.appendChild(li);
-  
+  const cartPlace = document.querySelector('.cart__items');
+  cartPlace.appendChild(li);
+
+  const itemToBeSaved = { sku, name, salePrice };
+  arraySavedItems.push(itemToBeSaved);
+  console.log(arraySavedItems);
+  saveCartItems(arraySavedItems);
   return li;
 }
 
 async function clickAddItemToCartList() {
   const [...buttonAdicionarAoCarrinho] = document.getElementsByClassName('item__add');
   const elementID = document.getElementsByClassName('item__sku');
-
   buttonAdicionarAoCarrinho.forEach((elemt, index) => {
     elemt.addEventListener('click', async () => {
       createCartItemElement(await fetchItem(elementID[index].innerText));
@@ -66,4 +81,6 @@ window.onload = async () => {
   });
 
   clickAddItemToCartList();
+  
+  getSavedCartItems().forEach((element) => createCartItemElement(element));
 };
