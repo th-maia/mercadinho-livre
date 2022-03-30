@@ -1,7 +1,8 @@
 // const { fetchProducts } = require('./helpers/fetchProducts');
 // const getSavedCartItems = require("./helpers/getSavedCartItems");
 // const saveCartItems = require("./helpers/saveCartItems");
-const arraySavedItems = [];
+let arraySavedItems = [];
+const cartPlace = document.querySelector('.cart__items');
 
 function calculateSubTotal() {
   const subTotal = arraySavedItems.reduce((acc, cur) => {
@@ -11,6 +12,13 @@ function calculateSubTotal() {
   }, 0);
   const subTotalPlace = document.getElementsByClassName('total-price')[0];
   subTotalPlace.innerText = subTotal;
+}
+
+function clickButtonEsvaziarCarrinho() {
+  arraySavedItems.forEach(() => document.querySelector('.cart__items').firstChild.remove());
+  arraySavedItems = [];
+  saveCartItems(arraySavedItems);
+  calculateSubTotal();
 }
 
 function createProductImageElement(imageSource) {
@@ -26,7 +34,7 @@ function createCustomElement(element, className, innerText) {
   e.innerText = innerText;
   return e;
 }
-// function createProductItemElement({ sku, name, image }) {
+
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
@@ -45,8 +53,7 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   console.log(event.target);
-  const cartPlace = document.querySelector('.cart__items');
-
+  
   const indexOfClickedElement = Array.prototype.indexOf.call(cartPlace.children, event.target); // entender o que faz certinho explicar https://www.geeksforgeeks.org/how-to-get-the-child-node-index-in-javascript/
   console.log(indexOfClickedElement);
 
@@ -63,7 +70,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   
-  const cartPlace = document.querySelector('.cart__items');
   cartPlace.appendChild(li);
 
   const itemToBeSaved = { sku, name, salePrice };
@@ -95,4 +101,6 @@ window.onload = async () => {
   if (localStorage.cartItems !== undefined && localStorage.cartItems.length > 0) {
   getSavedCartItems().forEach((element) => createCartItemElement(element));
   }
+  const buttonEsvaziarCarrinho = document.querySelector('.empty-cart');
+  buttonEsvaziarCarrinho.addEventListener('click', clickButtonEsvaziarCarrinho);
 };
