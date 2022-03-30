@@ -9,7 +9,7 @@ function calculateSubTotal() {
     const accInt = (acc * 100);
     return (curInt + accInt) / 100;
   }, 0);
-  const subTotalPlace = document.getElementById('price');
+  const subTotalPlace = document.getElementsByClassName('total-price')[0];
   subTotalPlace.innerText = subTotal;
 }
 
