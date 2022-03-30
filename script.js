@@ -93,6 +93,7 @@ async function clickAddItemToCartList() {
 window.onload = async () => { 
   const htmlClassItems = document.querySelector('.items'); // local pedido no requisito 1 "o que será avaliado"
   const ArrayObjSkuNameImage = await fetchProducts('computador');
+  document.getElementsByClassName('loading')[0].remove();
   await ArrayObjSkuNameImage.forEach((element) => {
     htmlClassItems.appendChild(createProductItemElement(element));
   });
