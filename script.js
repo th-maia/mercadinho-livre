@@ -69,7 +69,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
-  
   cartPlace.appendChild(li);
 
   const itemToBeSaved = { sku, name, salePrice };
@@ -90,11 +89,25 @@ async function clickAddItemToCartList() {
   });
 }
 
+function fetchObjresultsToSkuNameImage(obj) {
+  const fetchObjResults = obj.results;
+  const ArrayObjSkuNameImage = fetchObjResults.map((elemento) => (
+    {
+    sku: elemento.id,
+    name: elemento.title,
+    image: elemento.thumbnail,
+    }));
+return ArrayObjSkuNameImage;
+}
+
 window.onload = async () => { 
-  const htmlClassItems = document.querySelector('.items'); // local pedido no requisito 1 "o que será avaliado"
-  const ArrayObjSkuNameImage = await fetchProducts('computador');
-  document.getElementsByClassName('loading')[0].remove();
+  const fetchJson = await fetchProducts('computador'); // pega o fetch computador em Json
+  const ArrayObjSkuNameImage = fetchObjresultsToSkuNameImage(fetchJson); // pega o cada objetoJson e transforma em um array de objetos com as chaves Sku,Name,Image
+  document.getElementsByClassName('loading')[0].remove(); // remove o elemento carregando
+
+  // pega o array de objetos, cria os elementos e coloca no html
   await ArrayObjSkuNameImage.forEach((element) => {
+    const htmlClassItems = document.querySelector('.items'); // local pedido no requisito 1 "o que será avaliado"
     htmlClassItems.appendChild(createProductItemElement(element));
   });
 

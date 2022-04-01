@@ -5,16 +5,8 @@ const fetchProducts = async (produto) => {
   
   const fetchJson = await fetch(url)
   .then((resposta) => resposta.json())
-  .then((json) => json.results)
-  .catch((error) => console.log(`Algo deu errado :( \n${error}`));
-  const ArrayObjSkuNameImage = fetchJson.map((elemento) => (
-    {
-    sku: elemento.id,
-    name: elemento.title,
-    image: elemento.thumbnail,
-    }));
-  // console.log(ArrayObjSkuNameImage);
-  return ArrayObjSkuNameImage;
+  .catch((error) => new Error('You must provide an url'));
+  return fetchJson;
 };
 
 // fetchProducts('computador');
