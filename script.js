@@ -52,13 +52,8 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  console.log(event.target);
-  
   const indexOfClickedElement = Array.prototype.indexOf.call(cartPlace.children, event.target); // entender o que faz certinho explicar https://www.geeksforgeeks.org/how-to-get-the-child-node-index-in-javascript/
-  console.log(indexOfClickedElement);
-
   arraySavedItems.splice(indexOfClickedElement, 1);
-  console.log(arraySavedItems);
   event.target.remove();
   saveCartItems(arraySavedItems);
   calculateSubTotal();
@@ -79,12 +74,23 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+async function fetchItemToSkuNameSaleP(ID) {
+  const fetchItemJson = await fetchItem(ID);
+  const ObjSkuNameSalePrice = {
+    sku: fetchItemJson.id,
+    name: fetchItemJson.title,
+    salePrice: fetchItemJson.price,
+    };
+  return ObjSkuNameSalePrice;
+}
+
 async function clickAddItemToCartList() {
-  const [...buttonAdicionarAoCarrinho] = document.getElementsByClassName('item__add');
-  const elementID = document.getElementsByClassName('item__sku');
+  const [...buttonAdicionarAoCarrinho] = document.getElementsByClassName('item__add'); // pega todos elementos da classe item__add e faz um array na ordem
+  const elementID = document.getElementsByClassName('item__sku'); // esse é um elemento html que tem o ID
+
   buttonAdicionarAoCarrinho.forEach((elemt, index) => {
     elemt.addEventListener('click', async () => {
-      createCartItemElement(await fetchItem(elementID[index].innerText));
+      createCartItemElement(await fetchItemToSkuNameSaleP(elementID[index].innerText)); // pega então o fetchItem( com argumento o elemento HTML com o ID que tem a mesma ordem(index) do elemento clicado) 
     });
   });
 }
@@ -105,16 +111,18 @@ window.onload = async () => {
   const ArrayObjSkuNameImage = fetchObjresultsToSkuNameImage(fetchJson); // pega o cada objetoJson e transforma em um array de objetos com as chaves Sku,Name,Image
   document.getElementsByClassName('loading')[0].remove(); // remove o elemento carregando
 
-  // pega o array de objetos, cria os elementos e coloca no html
-  await ArrayObjSkuNameImage.forEach((element) => {
-    const htmlClassItems = document.querySelector('.items'); // local pedido no requisito 1 "o que será avaliado"
+  await ArrayObjSkuNameImage.forEach((element) => {          
+    const htmlClassItems = document.querySelector('.items'); // local pedido no requisito 1 "o que será avaliado" para ser colocado os elementos
     htmlClassItems.appendChild(createProductItemElement(element));
   });
 
-  clickAddItemToCartList();
+  clickAddItemToCartList(); // quando clicar o item aparece no carrinho
+  
+  // se precisa ou não carregar os itens do local Storage
   if (localStorage.cartItems !== undefined && localStorage.cartItems.length > 0) {
   getSavedCartItems().forEach((element) => createCartItemElement(element));
   }
+
   const buttonEsvaziarCarrinho = document.querySelector('.empty-cart');
-  buttonEsvaziarCarrinho.addEventListener('click', clickButtonEsvaziarCarrinho);
+  buttonEsvaziarCarrinho.addEventListener('click', clickButtonEsvaziarCarrinho); // ativa o click no botão de esvaziar carrinho
 };
