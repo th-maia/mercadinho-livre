@@ -73,10 +73,6 @@ body {
   font-weight: 700;
 }
 
-.cart__item {
-  margin: 5px;;
-}
-
 .container {
   display: flex;
   justify-content: space-around;
