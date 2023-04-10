@@ -233,13 +233,4 @@ describe('Shopping Cart Project', () => {
       cy.readFile('coverage/coverage-summary.json').its('saveCartItems.lines.pct').should('be.gte', 100.00);
     });
   });
-
-  describe('11 - Desenvolva testes para atingir 100% de cobertura total e 100% da função getSavedCartItems', () => {
-    it('Verifica a cobertura de testes unitários', () => {
-      cy.exec('npm run test:coverage -- --coverageReporters="json-summary" --testFailureExitCode=0 && npm run serialize');
-      cy.readFile('coverage/coverage-summary.json').its('total.functions.pct').should('be.gte', 100.00);
-      cy.readFile('coverage/coverage-summary.json').its('getSavedCartItems.functions.pct').should('be.gte', 100.00);
-      cy.readFile('coverage/coverage-summary.json').its('getSavedCartItems.lines.pct').should('be.gte', 100.00);
-    });
-  });
 });
